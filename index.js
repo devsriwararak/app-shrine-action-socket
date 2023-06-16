@@ -52,12 +52,15 @@ io.on("connection", (socket) => {
       axios
         .get("https://bankcash1.herokuapp.com/Show/List/Top")
         .then((result) => io.sockets.emit("show_display_3", result.data))
-        // .then((result) => console.log(result.data))
-
         .catch((err) => res.send(err));
     } catch (err) {
       console.error("GG", err);
     }
+  });
+
+  socket.on("display_4", () => {
+    const data = "ลบแล้ว"
+    io.sockets.emit("show_display_4", data)
   });
 });
 
