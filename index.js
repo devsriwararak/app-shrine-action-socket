@@ -25,12 +25,35 @@ io.on("connection", (socket) => {
 
   //order
   socket.on("display_1", () => {
-    
     //io.sockets.emit("shop", data)
     try {
       axios
         .get("https://bankcash1.herokuapp.com/Show")
         .then((result) => io.sockets.emit("show_display_1", result.data))
+        .catch((err) => res.send(err));
+    } catch (err) {
+      console.error("GG", err);
+    }
+  });
+
+  socket.on("display_2", () => {
+    try {
+      axios
+        .get("https://bankcash1.herokuapp.com/Show")
+        .then((result) => io.sockets.emit("show_display_2", result.data))
+        .catch((err) => res.send(err));
+    } catch (err) {
+      console.error("GG", err);
+    }
+  });
+
+  socket.on("display_3", () => {
+    try {
+      axios
+        .get("https://bankcash1.herokuapp.com/Show/List/Top")
+        .then((result) => io.sockets.emit("show_display_3", result.data))
+        // .then((result) => console.log(result.data))
+
         .catch((err) => res.send(err));
     } catch (err) {
       console.error("GG", err);
