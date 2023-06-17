@@ -62,6 +62,33 @@ io.on("connection", (socket) => {
     const data = "ลบแล้ว"
     io.sockets.emit("show_display_4", data)
   });
+  
+
+  // Number 0
+  socket.on("number_0", () => {
+    const data = " "
+    io.sockets.emit("show_number_0", data)
+  });
+
+  // Number 1
+  socket.on("number_1", () => {
+    const data = "1"
+    io.sockets.emit("show_number_1", data)
+  });
+
+    // Number 2
+    socket.on("number_2", () => {
+      const data = "2"
+      io.sockets.emit("show_number_2", data)
+    });
+
+      // Number 3
+  socket.on("number_3", () => {
+    const data = "3"
+    io.sockets.emit("show_number_3", data)
+  });
+
+
 });
 
 // START SERVER
