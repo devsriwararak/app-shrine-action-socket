@@ -16,7 +16,7 @@ const io = new Server(server, {
 });
 
 // SOCKET IO
-io.on("connection", (socket) => {
+io.on("connection",  (socket) => {
   console.log("soket connect success :", socket.id);
 
   socket.on("disconnect", () => {
@@ -36,7 +36,7 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("display_2", () => {
+    socket.on("display_2",  () => {
     try {
       axios
         .get("https://bankcash1.herokuapp.com/Show")
@@ -71,10 +71,10 @@ io.on("connection", (socket) => {
   });
 
   // Number 1
-  socket.on("number_1", () => {
-    const data = "1"
-    io.sockets.emit("show_number_1", data)
-  });
+  // socket.on("number_1", () => {
+  //   const data = "1"
+  //   io.sockets.emit("show_number_1", data)
+  // });
 
     // Number 2
     socket.on("number_2", () => {
@@ -88,6 +88,38 @@ io.on("connection", (socket) => {
     io.sockets.emit("show_number_3", data)
   });
 
+        // Number 3
+        socket.on("number_4", () => {
+          try {
+            axios
+              .get("https://bankcash1.herokuapp.com/Show")
+              .then((result) => io.sockets.emit("show_number_4", result.data))
+              .catch((err) => res.send(err));
+          } catch (err) {
+            console.error("GG", err);
+          }
+          // const data = "4"
+          // io.sockets.emit("show_number_4", data)
+        });
+      
+
+
+});
+
+
+// SOCKET IO 2
+io.on("connection", (socket) => {
+  console.log("soket connect success-2 :", socket.id);
+
+  socket.on("disconnect", () => {
+    console.log("user disconnected-2 ", socket.id);
+  });
+
+    // Number 1
+    socket.on("number_1", () => {
+      const data = "1"
+      io.sockets.emit("show_number_1", data)
+    });
 
 });
 
