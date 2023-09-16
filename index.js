@@ -13,7 +13,7 @@ const io = new Server(server, {
     origin: [
       "http://localhost:5173",
       "https://shrine-auction-app.netlify.app",
-      // "http://192.168.1.58:5173",
+      "http://192.168.1.58:5173",
       "http://192.168.1.149:5173",
       "http://192.168.1.7:5173",
       "http://192.168.1.96:8000",
