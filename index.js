@@ -4,6 +4,7 @@ const http = require("http");
 const cors = require("cors");
 const { Server } = require("socket.io");
 const axios = require("axios");
+require('dotenv').config()
 
 app.use(cors());
 const server = http.createServer(app);
@@ -18,7 +19,6 @@ const io = new Server(server, {
       "http://192.168.1.149:5173",
       "http://192.168.1.7:5173",
       "http://192.168.1.96:8000",
-      "http://192.168.1.96:8000",
       "http://127.0.0.1:5173",
     ],
     methods: ["GET", "POST"],
@@ -26,30 +26,21 @@ const io = new Server(server, {
 });
 
 // SOCKET IO
-io.on("connection", (socket) => {
-  console.log("soket connect success :", socket.id);
+io.on("connection", async (socket) => {
+  await console.log("soket connect success :", socket.id);
 
-  socket.on("disconnect", () => {
-    console.log("user disconnected ", socket.id);
+  socket.on("disconnect", async () => {
+   await console.log("user disconnected ", socket.id);
   });
 
-  // test
-  //   socket.on('test', ()=>{
 
-  //     try {
-  //         io.sockets.emit('testSocket','555555555555555555')
-  //     } catch (error) {
-  //       console.log(error);
-
-  //     }
-  //   })
 
   //order
-  socket.on("display_1", () => {
+  socket.on("display_1", async () => {
     //io.sockets.emit("shop", data)
     try {
-      axios
-        .get("https://bankcash1.herokuapp.com/Show")
+     await axios
+        .get(`${process.env.API}/Show`)
         .then((result) => io.sockets.emit("show_display_1", result.data))
 
         .catch((err) => res.send(err));
@@ -58,12 +49,12 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("display_2", () => {
+  socket.on("display_2", async () => {
     let data;
 
     // ข้อมูลเสริม
     try {
-      axios.get("https://bankcash1.herokuapp.com/Show").then((newData) => {
+     await axios.get(`${process.env.API}/Show`).then((newData) => {
         data = newData.data;
         mainData(data);
       });
@@ -72,9 +63,9 @@ io.on("connection", (socket) => {
     }
 
     // ข้อมูลหลัก
-    mainData = (data) => {
+    mainData = async (data) => {
       try {
-        axios.get("https://bankcash1.herokuapp.com/Show").then((newData) => {
+       await axios.get(`${process.env.API}/Show`).then((newData) => {
           const updateData = {
             main: {
               ...newData.data,
@@ -89,12 +80,12 @@ io.on("connection", (socket) => {
     };
   });
 
-  socket.on("display_3", () => {
+  socket.on("display_3", async () => {
     let data;
 
     // ข้อมูลเสริม
     try {
-      axios.get("https://bankcash1.herokuapp.com/Show").then((newData) => {
+    await  axios.get(`${process.env.API}/Show`).then((newData) => {
         data = newData.data;
         mainData(data);
       });
@@ -102,10 +93,10 @@ io.on("connection", (socket) => {
       console.error("GG", err);
     }
     // ข้อมูลหลัก
-    mainData = (data) => {
+    mainData = async (data) => {
       try {
-        axios
-          .get("https://bankcash1.herokuapp.com/Show/List/Top")
+      await  axios
+          .get(`${process.env.API}/Show/List/Top`)
           .then((newData) => {
             const updateData = {
               main: [...newData.data],
@@ -121,18 +112,18 @@ io.on("connection", (socket) => {
     };
   });
 
-  socket.on("display_4", () => {
+  socket.on("display_4", async () => {
     const data = "ลบแล้ว";
-    io.sockets.emit("show_display_4", data);
+   await io.sockets.emit("show_display_4", data);
   });
 
   // Number 0
-  socket.on("number_0", () => {
+  socket.on("number_0",  () => {
     let data;
 
     // ข้อมูลเสริม
     try {
-      axios.get("https://bankcash1.herokuapp.com/Show").then((newData) => {
+      axios.get(`${process.env.API}/Show`).then((newData) => {
         data = newData.data;
         mainData(data);
       });
@@ -140,10 +131,10 @@ io.on("connection", (socket) => {
       console.error("GG", err);
     }
     // ข้อมูลหลัก
-    mainData = (data) => {
+    mainData =  async(data) => {
       try {
-        axios
-          .get("https://bankcash1.herokuapp.com/Show/List/Top")
+      await  axios
+          .get(`${process.env.API}/Show/List/Top`)
           .then((newData) => {
             const updateData = {
               main: [...newData.data],
@@ -161,12 +152,12 @@ io.on("connection", (socket) => {
   });
 
   //Number 1
-  socket.on("number_1", () => {
+  socket.on("number_1",() => {
     let data;
 
     // ข้อมูลเสริม
     try {
-      axios.get("https://bankcash1.herokuapp.com/Show").then((newData) => {
+      axios.get(`${process.env.API}/Show`).then((newData) => {
         data = newData.data;
         mainData(data);
       });
@@ -174,10 +165,10 @@ io.on("connection", (socket) => {
       console.error("GG", err);
     }
     // ข้อมูลหลัก
-    mainData = (data) => {
+    mainData = async (data) => {
       try {
-        axios
-          .get("https://bankcash1.herokuapp.com/Show/List/Top")
+       await axios
+          .get(`${process.env.API}/Show/List/Top`)
           .then((newData) => {
             const updateData = {
               main: [...newData.data],
@@ -200,7 +191,7 @@ io.on("connection", (socket) => {
 
     // ข้อมูลเสริม
     try {
-      axios.get("https://bankcash1.herokuapp.com/Show").then((newData) => {
+      axios.get(`${process.env.API}/Show`).then((newData) => {
         data = newData.data;
         mainData(data);
       });
@@ -208,10 +199,10 @@ io.on("connection", (socket) => {
       console.error("GG", err);
     }
     // ข้อมูลหลัก
-    mainData = (data) => {
+    mainData = async  (data) => {
       try {
-        axios
-          .get("https://bankcash1.herokuapp.com/Show/List/Top")
+       await axios
+          .get(`${process.env.API}/Show/List/Top`)
           .then((newData) => {
             const updateData = {
               main: [...newData.data],
@@ -229,12 +220,12 @@ io.on("connection", (socket) => {
   });
 
   // Number 3
-  socket.on("number_3", () => {
+  socket.on("number_3",  () => {
     let data;
 
     // ข้อมูลเสริม
     try {
-      axios.get("https://bankcash1.herokuapp.com/Show").then((newData) => {
+       axios.get(`${process.env.API}/Show`).then((newData) => {
         data = newData.data;
         mainData(data);
       });
@@ -242,10 +233,10 @@ io.on("connection", (socket) => {
       console.error("GG", err);
     }
     // ข้อมูลหลัก
-    mainData = (data) => {
+    mainData = async  (data) => {
       try {
-        axios
-          .get("https://bankcash1.herokuapp.com/Show/List/Top")
+      await await axios
+          .get(`${process.env.API}/Show/List/Top`)
           .then((newData) => {
             const updateData = {
               main: [...newData.data],
@@ -268,7 +259,7 @@ io.on("connection", (socket) => {
 
     // ข้อมูลเสริม
     try {
-      axios.get("https://bankcash1.herokuapp.com/Finish").then((newData) => {
+      axios.get(`${process.env.API}/Finish`).then((newData) => {
         data = newData.data;
         mainData(data);
       });
@@ -277,7 +268,7 @@ io.on("connection", (socket) => {
     }
 
     // ข้อมูลหลัก
-    mainData = (dataSub) => {
+    mainData = async(dataSub) => {
       const updateData = {
         main: {
           ...dataSub,
@@ -285,14 +276,14 @@ io.on("connection", (socket) => {
         data: "4",
       };
       // console.log(updateData);
-      io.sockets.emit("show_number_4", updateData);
+     await io.sockets.emit("show_number_4", updateData);
     };
   });
 
   // Number_5
 
-  socket.on("number_5", () => {
-    io.sockets.emit("show_number_5", 5);
+  socket.on("number_5", async () => {
+   await io.sockets.emit("show_number_5", 5);
   });
 
   // GET Old Data
