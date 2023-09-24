@@ -20,6 +20,7 @@ const io = new Server(server, {
       "http://192.168.1.7:5173",
       "http://192.168.1.96:8000",
       "http://127.0.0.1:5173",
+      "https://bankcash1.herokuapp.com"
     ],
     methods: ["GET", "POST"],
   },
