@@ -4,7 +4,7 @@ const http = require("http");
 const cors = require("cors");
 const { Server } = require("socket.io");
 const axios = require("axios");
-require('dotenv').config()
+require("dotenv").config();
 
 app.use(cors());
 const server = http.createServer(app);
@@ -20,7 +20,7 @@ const io = new Server(server, {
       "http://192.168.1.7:5173",
       "http://192.168.1.96:8000",
       "http://127.0.0.1:5173",
-      "https://bankcash1.herokuapp.com"
+      "https://bankcash1.herokuapp.com",
     ],
     methods: ["GET", "POST"],
   },
@@ -28,45 +28,39 @@ const io = new Server(server, {
 
 // SOCKET IO
 io.on("connection", async (socket) => {
-  await console.log("soket connect success :", socket.id);
+  try {
+    console.log("soket connect success :", socket.id);
+  } catch (error) {
+    console.log(error);
+  }
 
   socket.on("disconnect", async () => {
-   await console.log("user disconnected ", socket.id);
+    try {
+      console.log("user disconnected ", socket.id);
+    } catch (error) {
+      console.log(error);
+    }
   });
-
-
 
   //order
   socket.on("display_1", async () => {
     //io.sockets.emit("shop", data)
     try {
-     await axios
+      await axios
         .get(`${process.env.API}/Show`)
         .then((result) => io.sockets.emit("show_display_1", result.data))
 
         .catch((err) => res.send(err));
     } catch (err) {
-      console.error("GG", err);
+      console.error("display_1", err);
     }
   });
 
   socket.on("display_2", async () => {
-    let data;
-
-    // ข้อมูลเสริม
-    try {
-     await axios.get(`${process.env.API}/Show`).then((newData) => {
-        data = newData.data;
-        mainData(data);
-      });
-    } catch (err) {
-      console.error("GG", err);
-    }
-
     // ข้อมูลหลัก
-    mainData = async (data) => {
+    const mainData = async (data) => {
       try {
-       await axios.get(`${process.env.API}/Show`).then((newData) => {
+        axios.get(`${process.env.API}/Show`).then((newData) => {
           const updateData = {
             main: {
               ...newData.data,
@@ -79,197 +73,172 @@ io.on("connection", async (socket) => {
         console.error("GG", err);
       }
     };
-  });
-
-  socket.on("display_3", async () => {
-    let data;
 
     // ข้อมูลเสริม
     try {
-    await  axios.get(`${process.env.API}/Show`).then((newData) => {
-        data = newData.data;
-        mainData(data);
-      });
+      const res = await axios.get(`${process.env.API}/Show`);
+      await mainData(res.data);
     } catch (err) {
-      console.error("GG", err);
+      console.error("display_2", err);
     }
-    // ข้อมูลหลัก
-    mainData = async (data) => {
+  });
+
+  socket.on("display_3", async () => {
+    // FUNCTION
+    const mainData = async (data_1) => {
       try {
-      await  axios
+        axios
           .get(`${process.env.API}/Show/List/Top`)
           .then((newData) => {
             const updateData = {
               main: [...newData.data],
-              ...data,
+              ...data_1,
             };
             io.sockets.emit("show_display_3", updateData);
-            console.log(updateData);
           })
           .catch((err) => res.send(err));
       } catch (err) {
         console.error("GG", err);
       }
     };
+    // ข้อมูลหลัก
+    try {
+      const res = await axios.get(`${process.env.API}/Show`);
+      await mainData(res.data);
+    } catch (err) {
+      console.error("GG", err);
+    }
   });
 
   socket.on("display_4", async () => {
     const data = "ลบแล้ว";
-   await io.sockets.emit("show_display_4", data);
+    await io.sockets.emit("show_display_4", data);
   });
 
   // Number 0
-  socket.on("number_0",  () => {
-    let data;
-
-    // ข้อมูลเสริม
-    try {
-      axios.get(`${process.env.API}/Show`).then((newData) => {
-        data = newData.data;
-        mainData(data);
-      });
-    } catch (err) {
-      console.error("GG", err);
-    }
-    // ข้อมูลหลัก
-    mainData =  async(data) => {
+  socket.on("number_0", async () => {
+    // FUNCTION
+    const mainData = async (data) => {
       try {
-      await  axios
+        axios
           .get(`${process.env.API}/Show/List/Top`)
           .then((newData) => {
             const updateData = {
               main: [...newData.data],
               ...data,
-              number: 0
+              number: 0,
             };
             io.sockets.emit("show_number_1", updateData);
-            console.log(updateData);
           })
           .catch((err) => res.send(err));
       } catch (err) {
         console.error("GG", err);
       }
     };
+
+    // ข้อมูลเสริม
+    try {
+      const res = axios.get(`${process.env.API}/Show`);
+      await mainData(res.data);
+    } catch (err) {
+      console.error("GG", err);
+    }
   });
 
   //Number 1
-  socket.on("number_1",() => {
-    let data;
-
-    // ข้อมูลเสริม
-    try {
-      axios.get(`${process.env.API}/Show`).then((newData) => {
-        data = newData.data;
-        mainData(data);
-      });
-    } catch (err) {
-      console.error("GG", err);
-    }
-    // ข้อมูลหลัก
-    mainData = async (data) => {
+  socket.on("number_1", async () => {
+    // FUNCTION
+    const mainData = async (data) => {
       try {
-       await axios
+        axios
           .get(`${process.env.API}/Show/List/Top`)
           .then((newData) => {
             const updateData = {
               main: [...newData.data],
               ...data,
-              number: 1
+              number: 1,
             };
             io.sockets.emit("show_number_1", updateData);
-            console.log(updateData);
           })
           .catch((err) => res.send(err));
       } catch (err) {
         console.error("GG", err);
       }
     };
+
+    // ข้อมูลเสริม
+    try {
+      const res = await axios.get(`${process.env.API}/Show`);
+      await mainData(res.data);
+    } catch (err) {
+      console.error("GG", err);
+    }
   });
 
   // Number 2
-  socket.on("number_2", () => {
-    let data;
-
-    // ข้อมูลเสริม
-    try {
-      axios.get(`${process.env.API}/Show`).then((newData) => {
-        data = newData.data;
-        mainData(data);
-      });
-    } catch (err) {
-      console.error("GG", err);
-    }
-    // ข้อมูลหลัก
-    mainData = async  (data) => {
+  socket.on("number_2", async () => {
+    // FUNCTION
+    const mainData = async (data) => {
       try {
-       await axios
+        axios
           .get(`${process.env.API}/Show/List/Top`)
           .then((newData) => {
             const updateData = {
               main: [...newData.data],
               ...data,
-              number: 2
+              number: 2,
             };
             io.sockets.emit("show_number_1", updateData);
-            console.log(updateData);
           })
           .catch((err) => res.send(err));
       } catch (err) {
         console.error("GG", err);
       }
     };
+
+    // ข้อมูลเสริม
+    try {
+      const res = await axios.get(`${process.env.API}/Show`);
+      await mainData(res.data);
+    } catch (err) {
+      console.error("GG", err);
+    }
   });
 
   // Number 3
-  socket.on("number_3",  () => {
-    let data;
-
-    // ข้อมูลเสริม
-    try {
-       axios.get(`${process.env.API}/Show`).then((newData) => {
-        data = newData.data;
-        mainData(data);
-      });
-    } catch (err) {
-      console.error("GG", err);
-    }
-    // ข้อมูลหลัก
-    mainData = async  (data) => {
+  socket.on("number_3", async () => {
+    // FUNCTION
+    const mainData = async (data) => {
       try {
-      await await axios
+        axios
           .get(`${process.env.API}/Show/List/Top`)
           .then((newData) => {
             const updateData = {
               main: [...newData.data],
               ...data,
-              number: 3
+              number: 3,
             };
             io.sockets.emit("show_number_1", updateData);
-            console.log(updateData);
           })
           .catch((err) => res.send(err));
       } catch (err) {
         console.error("GG", err);
       }
     };
-  });
-
-  // Number 4
-  socket.on("number_4", () => {
-    // io.sockets.emit("show_number_4", 4);
 
     // ข้อมูลเสริม
     try {
-      axios.get(`${process.env.API}/Finish`).then((newData) => {
-        data = newData.data;
-        mainData(data);
-      });
+      const res = await axios.get(`${process.env.API}/Show`);
+      await mainData(res.data);
     } catch (err) {
       console.error("GG", err);
     }
+  });
 
-    // ข้อมูลหลัก
-    mainData = async(dataSub) => {
+  // Number 4
+  socket.on("number_4", async () => {
+    // FUNCTION
+    const mainData = async (dataSub) => {
       const updateData = {
         main: {
           ...dataSub,
@@ -277,14 +246,22 @@ io.on("connection", async (socket) => {
         data: "4",
       };
       // console.log(updateData);
-     await io.sockets.emit("show_number_4", updateData);
+      io.sockets.emit("show_number_4", updateData);
     };
+
+    // ข้อมูลเสริม
+    try {
+      const res = await axios.get(`${process.env.API}/Finish`);
+      await mainData(res.data);
+    } catch (err) {
+      console.error("GG", err);
+    }
   });
 
   // Number_5
 
   socket.on("number_5", async () => {
-   await io.sockets.emit("show_number_5", 5);
+    await io.sockets.emit("show_number_5", 5);
   });
 
   // GET Old Data
