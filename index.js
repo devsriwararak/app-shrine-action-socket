@@ -13,14 +13,13 @@ const io = new Server(server, {
   cors: {
     origin: [
       "http://localhost:5173",
-      "https://shrine-auction2-app.netlify.app",
       "http://192.168.1.58:5173",
       "http://192.168.43.77:5173",
       "http://192.168.1.149:5173",
       "http://192.168.1.7:5173",
-      "http://192.168.1.96:8000",
+      "http://192.168.100.69:5173",
+      "http://26.125.18.207:8000",
       "http://127.0.0.1:5173",
-      "https://bankcash1.herokuapp.com",
     ],
     methods: ["GET", "POST"],
   },
